@@ -7,7 +7,26 @@
 <title>로고·썸네일 도구</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Batang:wght@700&family=Gowun+Dodum&family=Jua&family=Nanum+Gothic:wght@400;700;800&family=Nanum+Myeongjo:wght@800&family=Nanum+Pen+Script&family=Noto+Serif+KR:wght@700&display=swap">
+<!-- 글꼴은 하나씩 따로 불러옴 (하나가 안 받아져도 나머지는 그대로 되게) -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sunflower:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dongle:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yeon+Sung&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root{
@@ -156,17 +175,24 @@ input[type=range]{width:100%;accent-color:var(--brown-deep);height:28px;margin:0
 .sw.on{box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--brown-deep)}
 .swatches .swatch{width:40px;height:40px;border-radius:50%;padding:3px}
 .swatches .swatch::-webkit-color-swatch{border-radius:50%}
-.fontpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:6px}
+.fontpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:6px}
 .fontpick label{position:relative}
 .fontpick input{position:absolute;opacity:0;width:1px;height:1px}
-.fontpick span{display:flex;align-items:center;justify-content:center;height:44px;padding:0 6px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:17px;cursor:pointer;color:var(--ink);white-space:nowrap;overflow:hidden}
+.fontpick span{display:flex;align-items:center;justify-content:center;height:42px;padding:0 6px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:17px;cursor:pointer;color:var(--ink);white-space:nowrap;overflow:hidden}
 .fontpick span:hover{border-color:var(--wood)}
 .fontpick input:checked+span{border-color:var(--brown-deep);box-shadow:inset 0 0 0 1px var(--brown-deep);background:#FBF7F0}
 .fontpick input:focus-visible+span{outline:2px solid var(--wood)}
-.stage{background:var(--sand);border-radius:12px;padding:14px;display:grid;place-items:center}
+.stage{position:relative;background:var(--sand);border-radius:12px;padding:14px;display:grid;place-items:center;overflow:hidden}
 #cv{display:block;width:100%;max-width:600px;height:auto;aspect-ratio:1;border-radius:4px;box-shadow:0 4px 18px rgba(0,0,0,.12);touch-action:none}
 #cv.can-drag{cursor:grab}
 #cv.dragging{cursor:grabbing}
+#cv.paint{cursor:crosshair}
+.brush-cursor{position:absolute;border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,.55),inset 0 0 0 1px rgba(0,0,0,.35);pointer-events:none}
+.savebar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.saved-inline{font-size:13px;color:var(--ok)}
+.saved-inline.bad{color:var(--bad)}
+.btnrow{display:flex;gap:8px}
+.btnrow .btn{flex:1}
 .hint{margin:10px 2px 0;font-size:13px;color:var(--muted);text-align:center}
 #tool-thumb .x{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 .toast{grid-column:1/-1;margin:0;font-size:13px;color:var(--ok);text-align:center;min-height:20px}
@@ -294,6 +320,10 @@ input[type=range]{width:100%;accent-color:var(--brown-deep);height:28px;margin:0
           <label><input type="radio" name="format" value="jpg"><span>JPG</span></label>
         </div>
       </div>
+      <div class="savebar">
+        <button type="button" class="btn small" id="logoSave">설정 저장</button>
+        <span class="saved-inline" data-saved></span>
+      </div>
     </form>
   </section>
 
@@ -358,7 +388,7 @@ input[type=range]{width:100%;accent-color:var(--brown-deep);height:28px;margin:0
     </section>
 
     <section class="card">
-      <h2>디자인 <button type="button" class="link" id="resetPhoto">사진 위치 처음으로</button></h2>
+      <h2>디자인</h2>
       <form class="form" id="thumbDesign" onsubmit="return false">
         <div class="row">
           <div class="seg" role="radiogroup" aria-label="디자인">
@@ -366,6 +396,23 @@ input[type=range]{width:100%;accent-color:var(--brown-deep);height:28px;margin:0
             <label><input type="radio" name="tpl" value="overlay"><span>매거진형</span></label>
             <label><input type="radio" name="tpl" value="frame"><span>액자형</span></label>
           </div>
+        </div>
+        <div class="row">
+          <div class="lab">글 위치 <small>바닥(매트)이 가려지지 않게 위로</small></div>
+          <div class="seg" role="radiogroup" aria-label="글 위치">
+            <label><input type="radio" name="textPos" value="top"><span>위</span></label>
+            <label><input type="radio" name="textPos" value="bottom"><span>아래</span></label>
+          </div>
+        </div>
+        <div class="row" id="cardColorRow">
+          <div class="lab">카드 색</div>
+          <div class="swatches" id="cardSwatches">
+            <input type="color" class="swatch" name="cardColor" aria-label="카드 색 직접 고르기" title="직접 고르기">
+          </div>
+        </div>
+        <div class="row" id="cardAlphaRow">
+          <label class="lab" for="cardAlpha">카드 진하기 <output id="cardAlphaOut"></output></label>
+          <input type="range" id="cardAlpha" name="cardAlpha" min="30" max="100" step="1">
         </div>
         <div class="row" id="frameColorRow">
           <div class="lab">테두리 색</div>
@@ -375,7 +422,7 @@ input[type=range]{width:100%;accent-color:var(--brown-deep);height:28px;margin:0
         </div>
         <div class="row" id="frameAlphaRow">
           <label class="lab" for="frameAlpha">테두리 진하기 <output id="frameAlphaOut"></output></label>
-          <input type="range" id="frameAlpha" name="frameAlpha" min="40" max="100" step="1">
+          <input type="range" id="frameAlpha" name="frameAlpha" min="30" max="100" step="1">
         </div>
         <div class="row">
           <div class="lab">제목 글꼴</div>
@@ -385,13 +432,43 @@ input[type=range]{width:100%;accent-color:var(--brown-deep);height:28px;margin:0
           <div class="lab">내용 글꼴</div>
           <div class="fontpick" id="bodyFontPick" role="radiogroup" aria-label="내용 글꼴"></div>
         </div>
+        <div class="savebar">
+          <button type="button" class="btn small" id="thumbSave">설정 저장</button>
+          <span class="saved-inline" data-saved></span>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>사진 · 부분 블러 <button type="button" class="link" id="resetPhoto">위치·크기 처음으로</button></h2>
+      <form class="form" id="thumbPhoto" onsubmit="return false">
         <div class="row">
-          <label class="lab" for="zoom">사진 확대 <output id="zoomOut"></output></label>
-          <input type="range" id="zoom" name="zoom" min="100" max="250" step="1">
+          <label class="lab" for="zoom">사진 크기 <output id="zoomOut"></output></label>
+          <input type="range" id="zoom" name="zoom" min="40" max="250" step="1">
         </div>
         <div class="row">
           <label class="lab" for="bright">사진 밝기 <output id="brightOut"></output></label>
           <input type="range" id="bright" name="bright" min="80" max="130" step="1">
+        </div>
+        <div class="row">
+          <div class="lab">미리보기에서 마우스로</div>
+          <div class="seg" role="radiogroup" aria-label="마우스로 할 일">
+            <label><input type="radio" name="tool" value="move"><span>사진 옮기기</span></label>
+            <label><input type="radio" name="tool" value="blur"><span>블러 칠하기</span></label>
+            <label><input type="radio" name="tool" value="erase"><span>블러 지우기</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <label class="lab" for="brush">붓 크기 <output id="brushOut"></output></label>
+          <input type="range" id="brush" name="brush" min="20" max="320" step="2">
+        </div>
+        <div class="row">
+          <label class="lab" for="blurAmt">블러 세기 <output id="blurAmtOut"></output></label>
+          <input type="range" id="blurAmt" name="blurAmt" min="10" max="100" step="1">
+        </div>
+        <div class="btnrow">
+          <button type="button" class="btn small" id="blurUndo" disabled>되돌리기 (Ctrl+Z)</button>
+          <button type="button" class="btn small" id="blurClear" disabled>블러 전부 지우기</button>
         </div>
       </form>
     </section>
@@ -400,7 +477,7 @@ input[type=range]{width:100%;accent-color:var(--brown-deep);height:28px;margin:0
   <div class="side">
     <section class="card">
       <h2>미리보기 <small>1080×1080</small></h2>
-      <div class="stage"><canvas id="cv" width="1080" height="1080"></canvas></div>
+      <div class="stage" id="stage"><canvas id="cv" width="1080" height="1080"></canvas><div class="brush-cursor" id="brushCursor" hidden></div></div>
       <p class="hint" id="hint">사진을 넣으면 미리보기에서 끌어서 위치를 맞출 수 있어요</p>
     </section>
     <div class="x">
@@ -478,7 +555,8 @@ const KV = (() => {
 
 /* ---------- 기본값 ---------- */
 const LOGO_DEFAULTS = {pos:'br', size:28, margin:2, opacity:100, tint:'orig', tintColor:'#6F5240', shadow:'off', output:'square', format:'png'};
-const THUMB_DEFAULTS = {tpl:'card', titleFont:'notoserif', bodyFont:'pretendard', frameColor:'#F7F3EC', frameAlpha:80, mat:'', color:'', dot:'#F6F3EE'};
+const THUMB_DEFAULTS = {tpl:'card', textPos:'top', cardColor:'#FFFDF8', cardAlpha:82, frameColor:'#F7F3EC', frameAlpha:80,
+  titleFont:'notoserif', bodyFont:'pretendard', mat:'', color:'', dot:'#F6F3EE', brush:90, blurAmt:60};
 
 /* ---------- 브랜드: 로고 + 로고 설정 + 썸네일 설정을 브랜드마다 저장 ---------- */
 const Brand = (() => {
@@ -564,9 +642,12 @@ const Brand = (() => {
     x.drawImage(img, 0, 0, w, h);
     const id = x.getImageData(0, 0, w, h), d = id.data;
     if (removeWhite) clearWhiteBg(d, w, h);
+    // 누끼 딴 로고에 눈에 안 보이게 남은 옅은 픽셀 정리
+    // (남겨두면 흰색으로 바꾸거나 그림자를 넣을 때 로고 뒤에 네모난 배경처럼 보임)
+    for (let i = 3; i < d.length; i += 4) if (d[i] < 24) d[i] = 0;
     let x0 = w, y0 = h, x1 = -1, y1 = -1;
     for (let yy = 0; yy < h; yy++) for (let xx = 0; xx < w; xx++){
-      if (d[(yy * w + xx) * 4 + 3] > 8){
+      if (d[(yy * w + xx) * 4 + 3] > 0){
         if (xx < x0) x0 = xx; if (xx > x1) x1 = xx;
         if (yy < y0) y0 = yy; if (yy > y1) y1 = yy;
       }
@@ -636,9 +717,17 @@ const Brand = (() => {
   }
   let saveT = 0;
   function saveSoon(){ clearTimeout(saveT); saveT = setTimeout(save, 400); }
+  function saveNow(){ clearTimeout(saveT); return save(); }
   async function save(){
     const ok = await KV.set(KEY, state);
     note(ok ? '✓ 저장됨' : '⚠ 저장하지 못했어요 (브라우저 저장 공간 부족)', ok ? 'ok' : 'bad');
+    // 각 설정 칸 아래에도 어느 브랜드에 저장됐는지 표시
+    const p = cur();
+    document.querySelectorAll('[data-saved]').forEach(el => {
+      el.textContent = ok ? `✓ '${p.name}' 설정에 저장됨 (바꿀 때마다 자동 저장)` : '⚠ 저장하지 못했어요';
+      el.classList.toggle('bad', !ok);
+    });
+    return ok;
   }
   function render(){
     const p = cur();
@@ -669,6 +758,7 @@ const Brand = (() => {
   }
   async function select(id){
     state.current = id;
+    document.querySelectorAll('[data-saved]').forEach(el => { el.textContent = ''; });
     await loadLogo();
     render(); emit(); saveSoon();
   }
@@ -720,7 +810,7 @@ const Brand = (() => {
   });
 
   return {
-    init, cur, saveSoon, setLogoFile, logoFor,
+    init, cur, saveSoon, saveNow, setLogoFile, logoFor,
     on: fn => subs.push(fn),
     hasLogo: () => !!logo,
     ratio: () => logo ? logo.height / logo.width : .75,
@@ -1003,6 +1093,7 @@ const LogoTool = (() => {
     showResult();
   });
   $('#downloadBtn').addEventListener('click', () => results && downloadResults());
+  $('#logoSave').addEventListener('click', () => Brand.saveNow());
 
   buildPosBox();
   // 브랜드를 바꾸거나 로고를 새로 넣으면 그 브랜드 설정으로 다시 그림
@@ -1015,38 +1106,60 @@ const LogoTool = (() => {
 /* ======================= 블로그 썸네일 ======================= */
 const ThumbTool = (() => {
   const S = 1080;
+  // scale: 글자가 원래 작게 생긴 글꼴은 크게 / ui: 고르는 버튼에서 보이는 글자 크기
   const TITLE_FONTS = {
-    notoserif:  {label:'노토 세리프',  family:"'Noto Serif KR'",     weight:700},
-    nanummj:    {label:'나눔명조',     family:"'Nanum Myeongjo'",    weight:800},
-    gowunbt:    {label:'고운바탕',     family:"'Gowun Batang'",      weight:700},
-    pretendard: {label:'프리텐다드',   family:"'Pretendard Variable'", weight:800},
-    gowundd:    {label:'고운돋움',     family:"'Gowun Dodum'",       weight:400},
-    blackhan:   {label:'검은고딕',     family:"'Black Han Sans'",    weight:400},
-    jua:        {label:'주아',         family:"'Jua'",               weight:400},
-    pen:        {label:'나눔손글씨 펜', family:"'Nanum Pen Script'",  weight:400, scale:1.3, ui:22}
+    notoserif:  {label:'노토 세리프',   family:"'Noto Serif KR'",       weight:700},
+    nanummj:    {label:'나눔명조',      family:"'Nanum Myeongjo'",      weight:800},
+    gowunbt:    {label:'고운바탕',      family:"'Gowun Batang'",        weight:700},
+    songmyung:  {label:'송명',          family:"'Song Myung'",          weight:400},
+    hahmlet:    {label:'함렛',          family:"'Hahmlet'",             weight:700},
+    pretendard: {label:'프리텐다드',    family:"'Pretendard Variable'", weight:800},
+    notosans:   {label:'노토 산스',     family:"'Noto Sans KR'",        weight:800},
+    gowundd:    {label:'고운돋움',      family:"'Gowun Dodum'",         weight:400},
+    sunflower:  {label:'해바라기',      family:"'Sunflower'",           weight:700},
+    dohyeon:    {label:'도현',          family:"'Do Hyeon'",            weight:400},
+    blackhan:   {label:'검은고딕',      family:"'Black Han Sans'",      weight:400},
+    jua:        {label:'주아',          family:"'Jua'",                 weight:400},
+    dongle:     {label:'동글',          family:"'Dongle'",              weight:700, scale:1.55, ui:28},
+    gaegu:      {label:'개구',          family:"'Gaegu'",               weight:700, scale:1.1,  ui:19},
+    yeonsung:   {label:'연성',          family:"'Yeon Sung'",           weight:400},
+    pen:        {label:'나눔손글씨 펜', family:"'Nanum Pen Script'",    weight:400, scale:1.3,  ui:22},
+    brush:      {label:'나눔손글씨 붓', family:"'Nanum Brush Script'",  weight:400, scale:1.25, ui:21}
   };
   const BODY_FONTS = {
     pretendard: {label:'프리텐다드', family:"'Pretendard Variable'", w:{n:500, b:600, x:700}},
+    notosans:   {label:'노토 산스',  family:"'Noto Sans KR'",        w:{n:500, b:600, x:700}},
+    gothica1:   {label:'고딕 A1',    family:"'Gothic A1'",           w:{n:500, b:600, x:700}},
+    ibmplex:    {label:'IBM 플렉스', family:"'IBM Plex Sans KR'",    w:{n:500, b:600, x:700}},
+    nanumgothic:{label:'나눔고딕',   family:"'Nanum Gothic'",        w:{n:400, b:700, x:800}},
     gowundd:    {label:'고운돋움',   family:"'Gowun Dodum'",         w:{n:400, b:400, x:400}},
-    nanumgothic:{label:'나눔고딕',   family:"'Nanum Gothic'",        w:{n:400, b:700, x:800}}
+    sunflower:  {label:'해바라기',   family:"'Sunflower'",           w:{n:500, b:700, x:700}}
   };
+  const CARD_SWATCHES = [['#FFFDF8','화이트'], ['#F7F3EC','베이지'], ['#E6D5BF','샌드'], ['#DDE3D6','세이지'], ['#6F5240','브라운'], ['#2C2925','차콜']];
   const FRAME_SWATCHES = [['#F7F3EC','베이지'], ['#FFFFFF','화이트'], ['#E6D5BF','샌드'], ['#DDE3D6','세이지'], ['#6F5240','브라운'], ['#2C2925','차콜']];
 
-  let th = null;                                  // 지금 브랜드의 썸네일 설정 (바꾸면 브랜드에 저장됨)
-  const st = {fx:.5, fy:.5, zoom:100, bright:100}; // 사진 위치·확대·밝기는 사진마다 새로
-  let photo = null;
-  let over = {x:0, y:0};   // 사진이 칸보다 넘치는 양 (끌기 계산용)
+  let th = null;                                             // 지금 브랜드의 썸네일 설정 (바꾸면 브랜드에 저장됨)
+  const st = {fx:.5, fy:.5, zoom:100, bright:100, tool:'move'}; // 사진 위치·크기·밝기는 사진마다 새로
+  let photo = null;        // 넣은 사진 (긴 변 2800px 이하로 줄인 것)
+  let bgBlur = null;       // 사진을 칸보다 작게 줄였을 때 빈 곳을 채울 흐린 사진
+  let over = {x:0, y:0};   // 사진이 칸보다 넘치는 양 (끌기 계산용, 작으면 음수)
+  let xf = null;           // 마지막으로 그린 사진의 위치·배율 (블러 붓 좌표 계산용)
   const cv = $('#cv'), ctx = cv.getContext('2d');
-  const info = $('#thumbInfo'), design = $('#thumbDesign');
+  const info = $('#thumbInfo'), design = $('#thumbDesign'), photoForm = $('#thumbPhoto');
 
   const TF = () => TITLE_FONTS[th.titleFont] || TITLE_FONTS.notoserif;
   const BF = () => BODY_FONTS[th.bodyFont] || BODY_FONTS.pretendard;
   const titleFont = s => `${TF().weight} ${Math.round(s)}px ${TF().family}, serif`;
   const bodyFont = (wk, s) => `${BF().w[wk]} ${Math.round(s)}px ${BF().family}, 'Malgun Gothic', sans-serif`;
-  function isDark(hex){
-    const n = parseInt(hex.slice(1), 16);
-    return (0.299 * (n >> 16 & 255) + 0.587 * (n >> 8 & 255) + 0.114 * (n & 255)) / 255 < .55;
-  }
+  const rgb = hex => { const n = parseInt(hex.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; };
+  const hexA = (hex, a) => `rgba(${rgb(hex).join(',')},${a})`;
+  const isDark = hex => { const [r, g, b] = rgb(hex); return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < .55; };
+  // 바탕색이 어두우면 글씨·로고를 흰색으로
+  const tone = hex => isDark(hex)
+    ? {ink:'#FFFFFF', sub:'rgba(255,255,255,.88)', lab:'rgba(255,255,255,.72)', tint:'white',
+       chip:{bg:'rgba(255,255,255,.14)', stroke:'rgba(255,255,255,.45)', fg:'#fff'}}
+    : {ink:'#4A3628', sub:'#6F5240', lab:'#A0826A', tint:'orig',
+       chip:{bg:'rgba(255,255,255,.72)', stroke:'rgba(111,82,64,.22)', fg:'#5A4232'}};
 
   /* ---------- 로고 ---------- */
   function fitLogo(maxW, maxH){
@@ -1089,6 +1202,8 @@ const ThumbTool = (() => {
     }
     return {lines, size:min};
   }
+  // 줄 높이: 손글씨처럼 크게 키운 글꼴은 줄 간격을 덜 벌림
+  const lineH = t => t.size * (TF().scale ? 1.05 : 1.24);
   function fitLine(text, wk, max, min, width){
     let s = max;
     for (; s > min; s -= 1){
@@ -1135,6 +1250,90 @@ const ThumbTool = (() => {
     ctx.fillText(text, x, cy);
     ctx.restore();
   }
+  // 반투명 판 밑 그림자: 판 바깥쪽에만 그려서 판이 비쳐도 탁해지지 않게
+  function softShadow(x, y, w, h, r, alpha){
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, 0, S, S); ctx.roundRect(x, y, w, h, r); ctx.clip('evenodd');
+    ctx.shadowColor = `rgba(40,28,20,${alpha})`; ctx.shadowBlur = 44; ctx.shadowOffsetY = 12;
+    ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fillStyle = '#000'; ctx.fill();
+    ctx.restore();
+  }
+
+  /* ---------- 부분 블러 ---------- */
+  let strokes = [];        // 칠한 붓질 [{mode:'blur'|'erase', r, pts:[[x,y]…]}] (사진 좌표라 사진을 옮겨도 그 자리에 붙어 있음)
+  let mask = null;         // 블러 칠한 곳
+  let blurred = null, blurredAmt = -1;
+  let fxCanvas = null, fxDirty = true;
+  let stroke = null;
+
+  function resetBlur(){
+    strokes = []; stroke = null; mask = null; blurred = null; blurredAmt = -1; fxDirty = true;
+    updateBlurBtns();
+  }
+  function maskCtx(){
+    if (!mask){ mask = document.createElement('canvas'); mask.width = photo.width; mask.height = photo.height; }
+    return mask.getContext('2d');
+  }
+  function dab(m, x, y, r){
+    const g = m.createRadialGradient(x, y, r * .45, x, y, r);
+    g.addColorStop(0, 'rgba(0,0,0,1)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    m.fillStyle = g;
+    m.beginPath(); m.arc(x, y, r, 0, Math.PI * 2); m.fill();
+  }
+  function paint(s, a, b){
+    const m = maskCtx();
+    m.save();
+    m.globalCompositeOperation = s.mode === 'erase' ? 'destination-out' : 'source-over';
+    const dx = b[0] - a[0], dy = b[1] - a[1], dist = Math.hypot(dx, dy), step = Math.max(1, s.r * .25);
+    if (!dist) dab(m, b[0], b[1], s.r);
+    for (let t = step; t <= dist; t += step) dab(m, a[0] + dx * t / dist, a[1] + dy * t / dist, s.r);
+    m.restore();
+    fxDirty = true;
+  }
+  function rebuildMask(){
+    if (mask) mask.getContext('2d').clearRect(0, 0, mask.width, mask.height);
+    for (const s of strokes){
+      paint(s, s.pts[0], s.pts[0]);
+      for (let i = 1; i < s.pts.length; i++) paint(s, s.pts[i - 1], s.pts[i]);
+    }
+    fxDirty = true;
+  }
+  // 블러 칠한 곳만 흐린 사진으로 바꾼 사진
+  function photoFx(){
+    if (!strokes.length || !mask) return photo;
+    if (blurredAmt !== th.blurAmt){
+      blurred = blurred || document.createElement('canvas');
+      blurred.width = photo.width; blurred.height = photo.height;
+      const b = blurred.getContext('2d');
+      b.drawImage(photo, 0, 0); // 가장자리가 비어 보이지 않게 원본을 먼저 깔고
+      b.filter = `blur(${Math.max(2, Math.round(Math.max(photo.width, photo.height) * .035 * th.blurAmt / 100))}px)`;
+      b.drawImage(photo, 0, 0);
+      b.filter = 'none';
+      blurredAmt = th.blurAmt; fxDirty = true;
+    }
+    if (fxDirty){
+      fxCanvas = fxCanvas || document.createElement('canvas');
+      if (fxCanvas.width !== photo.width || fxCanvas.height !== photo.height){ fxCanvas.width = photo.width; fxCanvas.height = photo.height; }
+      const f = fxCanvas.getContext('2d');
+      f.clearRect(0, 0, photo.width, photo.height);
+      f.drawImage(blurred, 0, 0);
+      f.globalCompositeOperation = 'destination-in';   // 칠한 곳만 남기고
+      f.drawImage(mask, 0, 0);
+      f.globalCompositeOperation = 'destination-over'; // 나머지는 원본
+      f.drawImage(photo, 0, 0);
+      f.globalCompositeOperation = 'source-over';
+      fxDirty = false;
+    }
+    return fxCanvas;
+  }
+  function updateBlurBtns(){
+    $('#blurUndo').disabled = $('#blurClear').disabled = !strokes.length;
+  }
+  function undoBlur(){
+    if (!strokes.length) return;
+    strokes.pop(); rebuildMask(); updateBlurBtns(); draw();
+  }
 
   /* ---------- 사진 ---------- */
   function drawPhoto(a, r){
@@ -1148,152 +1347,176 @@ const ThumbTool = (() => {
       ctx.font = bodyFont('b', 34);
       ctx.fillText('사진을 넣어주세요', a.x + a.w / 2, a.y + a.h * .5);
       ctx.restore();
-      over = {x:0, y:0};
+      over = {x:0, y:0}; xf = null;
       return;
     }
     const sc = Math.max(a.w / photo.width, a.h / photo.height) * st.zoom / 100;
     const dw = photo.width * sc, dh = photo.height * sc;
     if (st.bright !== 100) ctx.filter = `brightness(${st.bright / 100})`;
     ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(photo, a.x - (dw - a.w) * st.fx, a.y - (dh - a.h) * st.fy, dw, dh);
+    if (dw < a.w - .5 || dh < a.h - .5){
+      // 사진을 칸보다 작게 줄이면 빈 곳은 같은 사진을 흐리게 깔아서 채움
+      const bs = Math.max(a.w / bgBlur.width, a.h / bgBlur.height) * 1.08;
+      ctx.drawImage(bgBlur, a.x + (a.w - bgBlur.width * bs) / 2, a.y + (a.h - bgBlur.height * bs) / 2, bgBlur.width * bs, bgBlur.height * bs);
+    }
+    const x = a.x - (dw - a.w) * st.fx, y = a.y - (dh - a.h) * st.fy;
+    ctx.drawImage(photoFx(), x, y, dw, dh);
     ctx.restore();
     over = {x:dw - a.w, y:dh - a.h};
+    xf = {x, y, sc};
   }
 
-  /* ---------- 디자인 3종 ---------- */
-  // 카드형: 사진 전체 + 위쪽 흰 카드 + 오른쪽 아래 로고 배지
+  /* ---------- 디자인 3종 (글 위치: 위/아래) ---------- */
+  // 카드형: 사진 전체 + 반투명 카드(색·진하기 선택) + 로고는 카드 오른쪽 위
   function tplCard(d){
     drawPhoto({x:0, y:0, w:S, h:S});
+    const top = th.textPos !== 'bottom', T = tone(th.cardColor);
     const M = 56, P = 52, cw = S - M * 2, iw = cw - P * 2;
-    const t = fitTitle(d.apt, 80, 50, iw);
-    const lh = t.size * 1.24;
+    const L = Brand.hasLogo() ? fitLogo(150, 84) : null;
+    const t = fitTitle(d.apt, 80, 50, L ? iw - L.w - 28 : iw);
+    const lh = lineH(t);
     const spFs = d.space ? fitLine(d.space, 'n', 34, 22, iw) : 0;
     const chips = chipItems(d), chipH = 58;
-    const h = P + 26 + 20 + lh * t.lines.length + (d.space ? 12 + spFs * 1.35 : 0) + (chips.length ? 30 + chipH : 0) + P;
-    const x0 = M, y0 = M;
+    let h = P + 26 + 20 + lh * t.lines.length + (d.space ? 12 + spFs * 1.35 : 0) + (chips.length ? 30 + chipH : 0) + P;
+    if (L) h = Math.max(h, P + L.h + P);
+    const x0 = M, y0 = top ? M : S - M - h;
 
-    ctx.save();
-    ctx.shadowColor = 'rgba(40,28,20,.22)'; ctx.shadowBlur = 44; ctx.shadowOffsetY = 12;
+    softShadow(x0, y0, cw, h, 30, .22 * th.cardAlpha / 100);
     ctx.beginPath(); ctx.roundRect(x0, y0, cw, h, 30);
-    ctx.fillStyle = 'rgba(255,253,248,.96)'; ctx.fill();
-    ctx.restore();
+    ctx.fillStyle = hexA(th.cardColor, th.cardAlpha / 100); ctx.fill();
+    if (L) drawLogo(T.tint, x0 + cw - P - L.w, y0 + P - 6, L.w, L.h);
 
     let y = y0 + P;
-    label('시공 사례', x0 + P, y + 13, 24, '#A0826A');
+    label('시공 사례', x0 + P, y + 13, 24, T.lab);
     y += 26 + 20;
-    ctx.fillStyle = '#4A3628'; ctx.textBaseline = 'middle'; ctx.font = titleFont(t.size);
+    ctx.fillStyle = T.ink; ctx.textBaseline = 'middle'; ctx.font = titleFont(t.size);
     for (const l of t.lines){ ctx.fillText(l, x0 + P, y + lh / 2); y += lh; }
     if (d.space){
       y += 12;
-      ctx.fillStyle = '#6F5240'; ctx.font = bodyFont('n', spFs);
+      ctx.fillStyle = T.sub; ctx.font = bodyFont('n', spFs);
       ctx.fillText(d.space, x0 + P, y + spFs * 1.35 / 2);
       y += spFs * 1.35;
     }
     if (chips.length){
       y += 30;
-      chipRow(x0 + P, y, iw, chips, {h:chipH, fs:27, px:24, bg:'#F1E9DD', fg:'#5A4232'});
-    }
-    if (Brand.hasLogo()){
-      const L = fitLogo(170, 92), bp = 22, bw = L.w + bp * 2, bh = L.h + bp * 2;
-      const bx = S - M - bw, by = S - M - bh;
-      ctx.save();
-      ctx.shadowColor = 'rgba(40,28,20,.2)'; ctx.shadowBlur = 30; ctx.shadowOffsetY = 8;
-      ctx.beginPath(); ctx.roundRect(bx, by, bw, bh, 22);
-      ctx.fillStyle = 'rgba(255,253,248,.95)'; ctx.fill();
-      ctx.restore();
-      drawLogo('orig', bx + bp, by + bp, L.w, L.h);
+      chipRow(x0 + P, y, iw, chips, {h:chipH, fs:27, px:24, ...T.chip});
     }
   }
 
-  // 매거진형: 사진 전체 + 아래 어둡게 + 흰 글씨
+  // 매거진형: 사진 전체 + 글 쪽을 어둡게 + 흰 글씨
   function tplOverlay(d){
     drawPhoto({x:0, y:0, w:S, h:S});
-    let g = ctx.createLinearGradient(0, S * .28, 0, S);
+    const top = th.textPos !== 'bottom';
+    let g = top ? ctx.createLinearGradient(0, S * .72, 0, 0) : ctx.createLinearGradient(0, S * .28, 0, S);
     g.addColorStop(0, 'rgba(24,18,14,0)');
     g.addColorStop(.5, 'rgba(24,18,14,.42)');
     g.addColorStop(1, 'rgba(24,18,14,.84)');
     ctx.fillStyle = g; ctx.fillRect(0, 0, S, S);
-    g = ctx.createLinearGradient(0, 0, 0, 280);
+    // 로고 쪽도 살짝 어둡게 (흰 로고가 잘 보이게)
+    g = top ? ctx.createLinearGradient(0, S, 0, S - 280) : ctx.createLinearGradient(0, 0, 0, 280);
     g.addColorStop(0, 'rgba(24,18,14,.38)');
     g.addColorStop(1, 'rgba(24,18,14,0)');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, S, 280);
-    if (Brand.hasLogo()){ const L = fitLogo(170, 110); drawLogo('white', 64, 60, L.w, L.h, true); }
+    ctx.fillStyle = g; ctx.fillRect(0, top ? S - 280 : 0, S, 280);
+    if (Brand.hasLogo()){
+      const L = fitLogo(170, 110);
+      drawLogo('white', top ? S - 64 - L.w : 64, top ? S - 60 - L.h : 60, L.w, L.h, true);
+    }
 
     const P = 70, w = S - P * 2;
     const t = fitTitle(d.apt, 100, 60, w);
-    const lh = t.size * 1.2;
-    ctx.textBaseline = 'middle';
-    let y = S - P;
+    const lh = lineH(t) * .97;
     const line = [d.mat, d.color].filter(Boolean).join('   ·   ');
-    if (line){
-      const inFs = fitLine(line, 'n', 31, 20, w);
-      ctx.font = bodyFont('n', inFs); ctx.fillStyle = 'rgba(255,255,255,.9)';
-      ctx.fillText(line, P, y - inFs / 2);
-      y -= inFs + 28;
+    const inFs = line ? fitLine(line, 'n', 31, 20, w) : 0;
+    const sFs = d.space ? fitLine(d.space, 'b', 40, 24, w) : 0;
+    ctx.textBaseline = 'middle';
+    const drawTitle = y => {
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,0,0,.25)'; ctx.shadowBlur = 20;
+      ctx.font = titleFont(t.size); ctx.fillStyle = '#fff';
+      for (const l of t.lines){ ctx.fillText(l, P, y + lh / 2); y += lh; }
+      ctx.restore();
+    };
+    const pillO = {h:50, fs:23, px:22, stroke:'rgba(255,255,255,.7)', fg:'#fff'};
+    if (top){
+      let y = P;
+      pill(P, y, '시공 사례', pillO);
+      y += 50 + 20;
+      drawTitle(y); y += lh * t.lines.length;
+      if (d.space){
+        y += 12;
+        ctx.font = bodyFont('b', sFs); ctx.fillStyle = '#fff';
+        ctx.fillText(d.space, P, y + sFs * 1.3 / 2);
+        y += sFs * 1.3;
+      }
+      y += 26;
+      ctx.fillStyle = '#CDAE88'; ctx.fillRect(P, y, 64, 3);
+      y += 3 + 26;
+      if (line){
+        ctx.font = bodyFont('n', inFs); ctx.fillStyle = 'rgba(255,255,255,.9)';
+        ctx.fillText(line, P, y + inFs / 2);
+      }
+    } else {
+      let y = S - P;
+      if (line){
+        ctx.font = bodyFont('n', inFs); ctx.fillStyle = 'rgba(255,255,255,.9)';
+        ctx.fillText(line, P, y - inFs / 2);
+        y -= inFs + 28;
+      }
+      ctx.fillStyle = '#CDAE88'; ctx.fillRect(P, y - 3, 64, 3);
+      y -= 3 + 28;
+      if (d.space){
+        ctx.font = bodyFont('b', sFs); ctx.fillStyle = '#fff';
+        ctx.fillText(d.space, P, y - sFs * 1.3 / 2);
+        y -= sFs * 1.3 + 16;
+      }
+      y -= lh * t.lines.length;
+      drawTitle(y);
+      y -= 18;
+      pill(P, y - 50, '시공 사례', pillO);
     }
-    ctx.fillStyle = '#CDAE88'; ctx.fillRect(P, y - 3, 64, 3);
-    y -= 3 + 28;
-    if (d.space){
-      const sFs = fitLine(d.space, 'b', 40, 24, w);
-      ctx.font = bodyFont('b', sFs); ctx.fillStyle = '#fff';
-      ctx.fillText(d.space, P, y - sFs * 1.3 / 2);
-      y -= sFs * 1.3 + 16;
-    }
-    ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,.25)'; ctx.shadowBlur = 20;
-    ctx.font = titleFont(t.size); ctx.fillStyle = '#fff';
-    for (let i = t.lines.length - 1; i >= 0; i--){ ctx.fillText(t.lines[i], P, y - lh / 2); y -= lh; }
-    ctx.restore();
-    y -= 18;
-    pill(P, y - 50, '시공 사례', {h:50, fs:23, px:22, stroke:'rgba(255,255,255,.7)', fg:'#fff'});
   }
 
-  // 액자형: 사진 전체 위에 반투명 테두리(덮개) + 아래 글씨. 테두리 색이 어두우면 글씨는 흰색
+  // 액자형: 사진 전체 위에 반투명 테두리(덮개) + 글은 위 또는 아래
   function tplFrame(d){
     drawPhoto({x:0, y:0, w:S, h:S});
-    const fc = th.frameColor, dark = isDark(fc);
-    const ink = dark ? '#FFFFFF' : '#4A3628', sub = dark ? 'rgba(255,255,255,.88)' : '#6F5240', lab = dark ? 'rgba(255,255,255,.72)' : '#A0826A';
+    const top = th.textPos !== 'bottom', T = tone(th.frameColor);
     const M = 48, x0 = M + 14;
     const L = Brand.hasLogo() ? fitLogo(160, 118) : null;
     const tw = S - x0 * 2 - (L ? L.w + 36 : 0);
     const t = fitTitle(d.apt, 68, 44, tw);
-    const lh = t.size * 1.24;
+    const lh = lineH(t);
     const spFs = d.space ? fitLine(d.space, 'n', 32, 20, tw) : 0;
     const chips = chipItems(d), chipH = 52;
     const block = 24 + 16 + lh * t.lines.length + (d.space ? 8 + spFs * 1.35 : 0) + (chips.length ? 24 + chipH : 0);
     const ph = S - M - 38 - block - 54;
+    const winY = top ? 54 + block + 38 : M;
+    const textY = top ? 54 : M + ph + 38;
 
     // 사진 창만 뚫고 나머지를 테두리 색으로 반투명하게 덮음
     ctx.save();
-    ctx.globalAlpha = th.frameAlpha / 100;
-    ctx.fillStyle = fc;
-    ctx.beginPath(); ctx.rect(0, 0, S, S); ctx.roundRect(M, M, S - M * 2, ph, 26);
+    ctx.fillStyle = hexA(th.frameColor, th.frameAlpha / 100);
+    ctx.beginPath(); ctx.rect(0, 0, S, S); ctx.roundRect(M, winY, S - M * 2, ph, 26);
     ctx.fill('evenodd');
-    ctx.restore();
-    ctx.save();
     ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.roundRect(M, M, S - M * 2, ph, 26); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(M, winY, S - M * 2, ph, 26); ctx.stroke();
     ctx.restore();
 
-    let y = M + ph + 38;
-    const yTop = y;
-    label('시공 사례', x0, y + 12, 22, lab);
+    let y = textY;
+    label('시공 사례', x0, y + 12, 22, T.lab);
     y += 24 + 16;
-    ctx.fillStyle = ink; ctx.textBaseline = 'middle'; ctx.font = titleFont(t.size);
+    ctx.fillStyle = T.ink; ctx.textBaseline = 'middle'; ctx.font = titleFont(t.size);
     for (const l of t.lines){ ctx.fillText(l, x0, y + lh / 2); y += lh; }
     if (d.space){
       y += 8;
-      ctx.fillStyle = sub; ctx.font = bodyFont('n', spFs);
+      ctx.fillStyle = T.sub; ctx.font = bodyFont('n', spFs);
       ctx.fillText(d.space, x0, y + spFs * 1.35 / 2);
       y += spFs * 1.35;
     }
     if (chips.length){
       y += 24;
-      chipRow(x0, y, tw, chips, dark
-        ? {h:chipH, fs:25, px:22, bg:'rgba(255,255,255,.14)', stroke:'rgba(255,255,255,.45)', fg:'#fff'}
-        : {h:chipH, fs:25, px:22, bg:'#fff', stroke:'#E3D8C8', fg:'#5A4232'});
+      chipRow(x0, y, tw, chips, {h:chipH, fs:25, px:22, ...T.chip});
     }
-    if (L) drawLogo(dark ? 'white' : 'orig', S - x0 - L.w, yTop + (block - L.h) / 2, L.w, L.h);
+    if (L) drawLogo(T.tint, S - x0 - L.w, textY + (block - L.h) / 2, L.w, L.h);
   }
 
   const TPL = {card:tplCard, overlay:tplOverlay, frame:tplFrame};
@@ -1334,6 +1557,17 @@ const ThumbTool = (() => {
     $('#tSaveBtn').disabled = $('#copyBtn').disabled = !ok;
     $('#tSaveBtn').title = $('#copyBtn').title = ok ? '' : '사진과 아파트 이름을 넣어주세요';
   }
+  const HINTS = {
+    move: '미리보기를 끌어서 사진 위치를, 마우스 휠로 크기를 조절해요',
+    blur: '흐리게 할 곳을 미리보기에 칠하세요 · 휠로 붓 크기 조절',
+    erase: '칠한 블러를 문질러서 지워요 · 휠로 붓 크기 조절'
+  };
+  function updateHint(){
+    $('#hint').textContent = photo ? HINTS[st.tool] : '사진을 넣으면 미리보기에서 끌어서 위치를 맞출 수 있어요';
+    cv.classList.toggle('can-drag', !!photo && st.tool === 'move');
+    cv.classList.toggle('paint', !!photo && st.tool !== 'move');
+    if (st.tool === 'move') $('#brushCursor').hidden = true;
+  }
 
   /* ---------- 사진 넣기 ---------- */
   async function setPhoto(file){
@@ -1348,13 +1582,20 @@ const ThumbTool = (() => {
       const x = c.getContext('2d');
       x.imageSmoothingQuality = 'high';
       x.drawImage(img, 0, 0, c.width, c.height);
-      photo = c;
+      // 빈 곳 채울 흐린 사진 (작게 만들어 흐리게)
+      const kb = 360 / Math.max(c.width, c.height), b = document.createElement('canvas');
+      b.width = Math.max(1, Math.round(c.width * kb)); b.height = Math.max(1, Math.round(c.height * kb));
+      const bx = b.getContext('2d');
+      bx.drawImage(c, 0, 0, b.width, b.height);
+      bx.filter = 'blur(10px)';
+      bx.drawImage(c, 0, 0, b.width, b.height);
+      photo = c; bgBlur = b;
+      resetBlur();
       st.fx = st.fy = .5; st.zoom = 100; st.bright = 100; applyTh();
       $('#tThumb').src = url; $('#tThumb').hidden = false; $('#tThumbEmpty').hidden = true;
       $('#dropTitle').textContent = '다른 사진으로 바꾸기';
       $('#dropSub').textContent = file.name;
-      $('#hint').textContent = '미리보기를 끌어서 사진 위치를, 마우스 휠로 확대를 조절할 수 있어요';
-      cv.classList.add('can-drag');
+      updateHint();
       toast('');
       ready(); draw();
     }catch(e){
@@ -1364,80 +1605,136 @@ const ThumbTool = (() => {
   }
   $('#tFileInput').addEventListener('change', e => { setPhoto(e.target.files[0]); e.target.value = ''; });
 
-  /* ---------- 사진 끌기 · 휠 확대 ---------- */
+  /* ---------- 미리보기에서 마우스: 사진 옮기기 / 블러 칠하기·지우기 ---------- */
   let drag = null;
+  const toCanvas = e => { const r = cv.getBoundingClientRect(), k = S / r.width; return [(e.clientX - r.left) * k, (e.clientY - r.top) * k]; };
+  const toPhoto = e => { const [cx, cy] = toCanvas(e); return [(cx - xf.x) / xf.sc, (cy - xf.y) / xf.sc]; };
+  function moveCursor(e){
+    const c = $('#brushCursor');
+    if (!photo || st.tool === 'move' || !e){ c.hidden = true; return; }
+    const r = cv.getBoundingClientRect(), sr = $('#stage').getBoundingClientRect();
+    const d = th.brush * r.width / S;
+    c.hidden = false;
+    c.style.width = c.style.height = d + 'px';
+    c.style.left = (e.clientX - sr.left - d / 2) + 'px';
+    c.style.top = (e.clientY - sr.top - d / 2) + 'px';
+  }
+  let lastPointer = null;
   cv.addEventListener('pointerdown', e => {
-    if (!photo) return;
-    drag = {x:e.clientX, y:e.clientY, fx:st.fx, fy:st.fy};
+    if (!photo || !xf) return;
     cv.setPointerCapture(e.pointerId);
-    cv.classList.add('dragging');
-  });
-  cv.addEventListener('pointermove', e => {
-    if (!drag) return;
-    const k = S / cv.getBoundingClientRect().width;
-    if (over.x > 0) st.fx = Math.min(1, Math.max(0, drag.fx - (e.clientX - drag.x) * k / over.x));
-    if (over.y > 0) st.fy = Math.min(1, Math.max(0, drag.fy - (e.clientY - drag.y) * k / over.y));
+    if (st.tool === 'move'){
+      drag = {x:e.clientX, y:e.clientY, fx:st.fx, fy:st.fy};
+      cv.classList.add('dragging');
+      return;
+    }
+    const p = toPhoto(e);
+    stroke = {mode:st.tool, r:th.brush / 2 / xf.sc, pts:[p]};
+    strokes.push(stroke);
+    paint(stroke, p, p);
+    updateBlurBtns();
     draw();
   });
-  const endDrag = () => { drag = null; cv.classList.remove('dragging'); };
+  cv.addEventListener('pointermove', e => {
+    lastPointer = e;
+    moveCursor(e);
+    if (drag){
+      const k = S / cv.getBoundingClientRect().width;
+      // 사진이 칸보다 작으면(음수) 방향이 알아서 맞음
+      if (over.x) st.fx = Math.min(1, Math.max(0, drag.fx - (e.clientX - drag.x) * k / over.x));
+      if (over.y) st.fy = Math.min(1, Math.max(0, drag.fy - (e.clientY - drag.y) * k / over.y));
+      draw();
+    } else if (stroke){
+      const p = toPhoto(e);
+      paint(stroke, stroke.pts[stroke.pts.length - 1], p);
+      stroke.pts.push(p);
+      draw();
+    }
+  });
+  const endDrag = () => { drag = null; stroke = null; cv.classList.remove('dragging'); };
   cv.addEventListener('pointerup', endDrag);
   cv.addEventListener('pointercancel', endDrag);
+  cv.addEventListener('pointerleave', () => { lastPointer = null; if (!stroke) $('#brushCursor').hidden = true; });
   cv.addEventListener('wheel', e => {
     if (!photo) return;
     e.preventDefault();
-    st.zoom = Math.min(250, Math.max(100, Math.round(st.zoom - e.deltaY * .1)));
+    if (st.tool === 'move'){
+      st.zoom = Math.min(250, Math.max(40, Math.round(st.zoom - e.deltaY * .1)));
+    } else {
+      th.brush = Math.min(320, Math.max(20, Math.round((th.brush - e.deltaY * .2) / 2) * 2));
+      Brand.saveSoon(); moveCursor(e);
+    }
     applyTh(); draw();
   }, {passive:false});
+  // Ctrl+Z: 블러 되돌리기 (글자 입력 중일 때는 원래대로 글자 되돌리기)
+  addEventListener('keydown', e => {
+    if ($('#tool-thumb').hidden || !(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== 'z') return;
+    if (e.target instanceof HTMLInputElement && e.target.type === 'text') return;
+    if (!strokes.length) return;
+    e.preventDefault(); undoBlur();
+  });
+  $('#blurUndo').addEventListener('click', undoBlur);
+  $('#blurClear').addEventListener('click', () => { strokes = []; rebuildMask(); updateBlurBtns(); draw(); });
 
   /* ---------- 설정 ---------- */
   function buildPickers(){
     const fontOpt = (name, k, f) => `<label><input type="radio" name="${name}" value="${k}"><span style="font-family:${f.family};font-weight:${f.weight || f.w.b}${f.ui ? `;font-size:${f.ui}px` : ''}">${f.label}</span></label>`;
     $('#titleFontPick').innerHTML = Object.entries(TITLE_FONTS).map(([k, f]) => fontOpt('titleFont', k, f)).join('');
     $('#bodyFontPick').innerHTML = Object.entries(BODY_FONTS).map(([k, f]) => fontOpt('bodyFont', k, f)).join('');
-    const sw = $('#frameSwatches');
     // 미리 정한 색들 → 맨 끝에 직접 고르기
-    for (const [c, n] of FRAME_SWATCHES)
-      design.elements.frameColor.insertAdjacentHTML('beforebegin', `<button type="button" class="sw" data-color="${c}" style="background:${c}" title="${n}" aria-label="${n}"></button>`);
-    sw.addEventListener('click', e => {
-      const b = e.target.closest('.sw');
-      if (!b || !th) return;
-      th.frameColor = b.dataset.color;
-      Brand.saveSoon(); applyTh(); draw();
-    });
+    for (const [box, key, list] of [['#cardSwatches', 'cardColor', CARD_SWATCHES], ['#frameSwatches', 'frameColor', FRAME_SWATCHES]]){
+      const sw = $(box);
+      for (const [c, n] of list)
+        design.elements[key].insertAdjacentHTML('beforebegin', `<button type="button" class="sw" data-color="${c}" style="background:${c}" title="${n}" aria-label="${n}"></button>`);
+      sw.addEventListener('click', e => {
+        const b = e.target.closest('.sw');
+        if (!b || !th) return;
+        th[key] = b.dataset.color;
+        Brand.saveSoon(); applyTh(); draw();
+      });
+    }
   }
   // force: 브랜드를 바꿨을 때는 입력 중인 글자칸도 그 브랜드 값으로 덮어씀
   function applyTh(force){
     if (!th) return;
-    for (const f of [info, design])
+    for (const f of [info, design, photoForm])
       for (const k of Object.keys(THUMB_DEFAULTS)){
         const el = f.elements[k];
         if (!el) continue;
         if (el instanceof HTMLInputElement && el.type === 'text' && document.activeElement === el && !force) continue;
         el.value = th[k];
       }
-    design.elements.zoom.value = st.zoom;
-    design.elements.bright.value = st.bright;
+    photoForm.elements.zoom.value = st.zoom;
+    photoForm.elements.bright.value = st.bright;
+    photoForm.elements.tool.value = st.tool;
     $('#zoomOut').textContent = st.zoom + '%';
     $('#brightOut').textContent = st.bright + '%';
+    $('#brushOut').textContent = th.brush + 'px';
+    $('#blurAmtOut').textContent = th.blurAmt + '%';
+    $('#cardAlphaOut').textContent = th.cardAlpha + '%';
     $('#frameAlphaOut').textContent = th.frameAlpha + '%';
+    $('#cardColorRow').hidden = $('#cardAlphaRow').hidden = th.tpl !== 'card';
     $('#frameColorRow').hidden = $('#frameAlphaRow').hidden = th.tpl !== 'frame';
-    document.querySelectorAll('#frameSwatches .sw').forEach(b => b.classList.toggle('on', b.dataset.color.toLowerCase() === th.frameColor.toLowerCase()));
+    for (const [box, key] of [['#cardSwatches', 'cardColor'], ['#frameSwatches', 'frameColor']])
+      document.querySelectorAll(box + ' .sw').forEach(b => b.classList.toggle('on', b.dataset.color.toLowerCase() === th[key].toLowerCase()));
   }
   function onInput(e){
     const t = e.target;
     if (!th || !t.name) return;
     if (t.name === 'apt' || t.name === 'space'){ ready(); draw(); return; }
     if (t.name === 'zoom' || t.name === 'bright'){ st[t.name] = +t.value; applyTh(); draw(); return; }
+    if (t.name === 'tool'){ st.tool = t.value; updateHint(); return; }
     if (!(t.name in THUMB_DEFAULTS)) return;
     th[t.name] = t.type === 'range' ? +t.value : t.value;
     Brand.saveSoon();
     applyTh(); draw();
   }
-  for (const f of [info, design]){
+  for (const f of [info, design, photoForm]){
     f.addEventListener('input', onInput);
     f.addEventListener('change', onInput);
   }
   $('#resetPhoto').addEventListener('click', () => { st.fx = st.fy = .5; st.zoom = 100; st.bright = 100; applyTh(); draw(); });
+  $('#thumbSave').addEventListener('click', () => Brand.saveNow());
 
   /* ---------- 저장 · 복사 ---------- */
   let toastT = 0;
@@ -1463,8 +1760,9 @@ const ThumbTool = (() => {
   });
 
   buildPickers();
+  updateBlurBtns();
   document.fonts.addEventListener('loadingdone', draw);
-  Brand.on(() => { th = Brand.cur().thumb; applyTh(true); ready(); draw(); });
+  Brand.on(() => { th = Brand.cur().thumb; blurredAmt = -1; applyTh(true); ready(); updateHint(); draw(); });
   return {drop: $('#tDrop'), addFiles: files => setPhoto(files[0]), redraw: draw};
 })();
 </script>
